@@ -1,6 +1,5 @@
 package ua.edu.ucu.utils;
 
-import java.util.Arrays;
 import java.util.Iterator;
 
 public class Queue {
@@ -36,7 +35,7 @@ public class Queue {
             @Override
             public String next() {
                 currentIndex++;
-                return (String) lst.get(currentIndex);
+                return (String) lst.get(currentIndex - 1);
             }
         };
     }

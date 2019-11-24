@@ -2,8 +2,6 @@ package ua.edu.ucu.tries;
 
 import ua.edu.ucu.utils.Queue;
 
-import java.util.Arrays;
-
 public class RWayTrie implements Trie {
     private static int R = 256;
     private Node root;
@@ -28,38 +26,51 @@ public class RWayTrie implements Trie {
 
     @Override
     public boolean contains(String word) {
-        Node x = get(root, word, 0);
+        Node x = contains(root, word, 0);
         return x != null;
     }
 
-    private Node get(Node x, String key, int d) { // Return value associated with key in the subtrie rooted at x.
+    private Node contains(Node x, String key, int d) { // Return value associated with key in the subtrie rooted at x.
         if (x == null) {
             return null;
         }
         if (d == key.length()) {
+            if (x.val == null) {
+                return null;
+            }
             return x;
         }
         char c = key.charAt(d); // Use dth key char to identify subtrie.
-        return get(x.next[c], key, d + 1);
+        return contains(x.next[c], key, d + 1);
     }
 
     @Override
     public boolean delete(String word) {
-        root = delete(root, word, 0);
-        return root != null;
+        if (this.contains(word)) {
+            root = delete(root, word, 0);
+            return true;
+        }
+        return false;
     }
 
     private Node delete(Node x, String key, int d) {
-        if (x == null) return null;
-        if (d == key.length())
+        if (x == null) {
+            return null;
+        }
+        if (d == key.length()) {
             x.val = null;
-        else {
+        } else {
             char c = key.charAt(d);
             x.next[c] = delete(x.next[c], key, d + 1);
         }
-        if (x.val != null) return x;
-        for (char c = 0; c < R; c++)
-            if (x.next[c] != null) return x;
+        if (x.val != null) {
+            return x;
+        }
+        for (char c = 0; c < R; c++) {
+            if (x.next[c] != null) {
+                return x;
+            }
+        }
         return null;
     }
 
@@ -87,17 +98,33 @@ public class RWayTrie implements Trie {
         }
     }
 
+    private Node get(Node x, String key, int d) { // Return value associated with key in the subtrie rooted at x.
+        if (x == null) {
+            return null;
+        }
+        if (d == key.length()) {
+            return x;
+        }
+        char c = key.charAt(d); // Use dth key char to identify subtrie.
+        return get(x.next[c], key, d + 1);
+    }
+
     @Override
     public int size() {
         return size(root);
     }
 
     private int size(Node x) {
-        if (x == null) return 0;
+        if (x == null) {
+            return 0;
+        }
         int cnt = 0;
-        if (x.val != null) cnt++;
-        for (char c = 0; c < R; c++)
+        if (x.val != null) {
+            cnt++;
+        }
+        for (char c = 0; c < R; c++) {
             cnt += size(x.next[c]);
+        }
         return cnt;
     }
 
