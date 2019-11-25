@@ -52,7 +52,7 @@ public class PrefixMatchesITTest {
 
         Iterable<String> result1 = pm.wordsWithPrefix(pref1, k);
 
-        assertThat(result, containsInAnyOrder(expResult));
+        assertThat(result1, containsInAnyOrder(expResult));
     }
 
     @Test
